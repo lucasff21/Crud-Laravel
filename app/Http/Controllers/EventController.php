@@ -26,16 +26,16 @@ class EventController extends Controller
             $event->description = $request->description;
 
 
-
+            //RECEBER ARQUIVO DO TIPO IMAGEM NO LARAVEL
             if($request->hasFile('image') && $request->file('image')->isValid()){
-                
+
                 $requestImage = $request->image;
 
-                $extension = $requestImage->extension();
+                $extension = $requestImage->extension(); //pega a extensão do arquivo
 
-                $imageName =md5($requestImage->getClientOriginalName() . strtotime("now")) . "." . $extension;
+                $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")) . "." . $extension; // nome do path no banco
 
-                $request->image->move(public_path('img/events'), $imageName);
+                $requestImage->move(public_path('img/events'), $imageName); //salvar imagem no servidor
 
                 $event->image = $imageName;
             }
@@ -43,5 +43,11 @@ class EventController extends Controller
             $event->save();
 
             return redirect('/');
+    }
+
+    public function show($id){
+        $event = Event::findOrFail($id);
+
+        return view('events.show', ['event' => $event]);
     }
 }
