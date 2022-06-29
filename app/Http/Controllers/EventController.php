@@ -8,9 +8,19 @@ use Illuminate\Http\Request;
 class EventController extends Controller
 {
     public function index(){
-        $events = Event::all();
 
-        return view('welcome', ['events' => $events]);
+        $search = request('search');
+        //AQUI NO IF IRÁ REALIZAR UMA BUSCA, TRAZENDO O QUE SERÁ ESCRITO UTILIZANDO O METODO LIKE E PEGANDO COM O GET
+        //CASO NÃO TENHA NADA, ELE PASSARÁ PARA O ELSE E RETORNARÁ TODOS OS EVENTOS
+        if($search){
+            $events = Event::where([['title', 'like', '%'.$search.'%']]) ->get();
+        }else {
+            $events = Event::all();
+        }
+
+
+
+        return view('welcome', ['events' => $events, 'search' => $search]);
     }
 
     public function create(){
