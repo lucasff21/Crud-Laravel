@@ -13,14 +13,23 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * The path to the "home" route for your application.
      *
-     * Typically, users are redirected here after authentication.
+     * This is used by Laravel authentication to redirect users after login.
      *
      * @var string
      */
-    public const HOME = '/home';
+    public const HOME = '/dashboard';
 
     /**
-     * Define your route model bindings, pattern filters, and other route configuration.
+     * If specified, this namespace is automatically applied to your controller routes.
+     *
+     * In addition, it is set as the URL generator's root namespace.
+     *
+     * @var string
+     */
+    protected $namespace = null;
+
+    /**
+     * Define your route model bindings, pattern filters, etc.
      *
      * @return void
      */
@@ -29,12 +38,12 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('routes/api.php'));
-
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+
+            Route::prefix('api')
+                ->middleware('api')
+                ->group(base_path('routes/api.php'));
         });
     }
 
@@ -46,7 +55,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+            return Limit::perMinute(60);
         });
     }
 }
