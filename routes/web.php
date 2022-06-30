@@ -19,11 +19,14 @@ Route::get('/', [EventController::class, 'index']);
 Route::get('/events/create', [EventController::class, 'create'])->middleware('auth');
 Route::get('/events/{id}', [EventController::class, 'show']);
 Route::post('/events', [EventController::class, 'store']);
+Route::delete('/events/{id}', [EventController::class, 'destroy']); //PARA REALIZAR O DELETE, EU PRECISO INFORMAR NA ROTA O {ID}
+
+
 
 Route::get('/contact', function () {
     return view('contact');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::post('/dashboard', [EventController::class, 'dashboard'])->middleware('auth');
+
+
