@@ -206,6 +206,11 @@
   .dashboard-events-container th {
     width: 25%;
   }
+  /* EDIT PAGE*/
+  .img-preview{
+    width: 100px;
+    margin-top: 20px;
+  }
 
   /* footer */
   footer {
